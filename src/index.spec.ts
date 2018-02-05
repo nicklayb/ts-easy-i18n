@@ -16,17 +16,18 @@ const beforeTrans = () => {
     i18n.setCurrentLocale('en');
 };
 
-const uc = (text: string): string => text.toUpperCase();
-const surround = (text: string, params: string[]) => args[0] + text + args[1];
+const uc = (text: string, params?: string[]): string => text.toUpperCase();
+const surround = (text: string, params?: string[]) => params ? params[0] + text + params[1] : text;
 
 describe('trans', () => {
     beforeEach(beforeTrans);
 
     it('should translate hi with a name', () => {
         const key = 'hi';
-        const expectation = 'Hi Bob';
+        const name = 'Bob';
+        const expectation = `Hi ${name}`;
         const result = i18n.trans(key, {
-            name: 'Bob'
+            name
         });
         expect(result).equal(expectation);
     });

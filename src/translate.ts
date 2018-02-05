@@ -47,8 +47,8 @@ function getLocaleText(slug: string): string {
     return slug;
 }
 
-function trans(text: string, params: Dictionary<Object>): string {
-    return bindParams(getLocaleText(text), params);
+function trans(text: string, params?: Dictionary<Object>): string {
+    return (params) ? bindParams(getLocaleText(text), params) : bindParams(getLocaleText(text), {});
 }
 
 function registerLang(languageKey: string, translation = {}): void {

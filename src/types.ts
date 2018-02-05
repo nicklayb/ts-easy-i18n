@@ -7,8 +7,11 @@ interface Formattable {
     params: any[]
 }
 
+interface Formatter {
+    (text: string, params?: any[]): string
+}
+
 type LanguageBundle = Dictionary<any>;
-type Formatter = (text: string, params?: any[]) => string;
 type FormatterBundle = Dictionary<Formatter>;
 
 export {

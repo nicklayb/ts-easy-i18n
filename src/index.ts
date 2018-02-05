@@ -12,9 +12,8 @@ import { format,
 } from './formatters';
 import { Dictionary } from './types';
 
-function process(text:string, params:Dictionary<any> = {}, formatterKeys: string [] = []) {
-    let translatedText = trans(text, params);
-    return format(translatedText, formatterKeys);
+function process(text:string, params?:Dictionary<any>, formatterKeys?: string []) {
+    return format(trans(text, params || {}), formatterKeys || []);
 }
 
 export {

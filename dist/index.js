@@ -1,56 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const DEFAULT_LOCALE = 'en';
-const KEY_SPLITTER = '.';
-let _currentLocale = DEFAULT_LOCALE;
-let lang = {};
-function localeIsAvailable(locale) {
-    return !!lang[locale];
+const translate_1 = require("./translate");
+exports.trans = translate_1.trans;
+exports.getLanguages = translate_1.getLanguages;
+exports.setCurrentLocale = translate_1.setCurrentLocale;
+exports.getCurrentLocale = translate_1.getCurrentLocale;
+exports.registerLang = translate_1.registerLang;
+exports.getLocaleText = translate_1.getLocaleText;
+const formatters_1 = require("./formatters");
+exports.format = formatters_1.format;
+exports.registerFormatters = formatters_1.registerFormatters;
+exports.getFormatters = formatters_1.getFormatters;
+exports.extractFormatters = formatters_1.extractFormatters;
+function process(text, params, formatterKeys) {
+    return formatters_1.format(translate_1.trans(text, params || {}), formatterKeys || []);
 }
-function setCurrentLocale(currentLocale) {
-    _currentLocale = (localeIsAvailable(currentLocale)) ? currentLocale : DEFAULT_LOCALE;
-}
-exports.setCurrentLocale = setCurrentLocale;
-function getCurrentLocale() {
-    return _currentLocale;
-}
-exports.getCurrentLocale = getCurrentLocale;
-function bindParams(text, params) {
-    for (let key in params) {
-        let qualifiedKey = ':' + key;
-        text = text.replace(qualifiedKey, params[key]);
-    }
-    return text;
-}
-function getLocaleBundle() {
-    return lang[getCurrentLocale()];
-}
-function getLocaleText(slug) {
-    if (slug && slug.constructor === String) {
-        const splitted = slug.toString().split(KEY_SPLITTER);
-        let list = getLocaleBundle();
-        for (let i = 0; i < splitted.length; i++) {
-            const current = list[splitted[i]];
-            if (current) {
-                if (current.constructor === String) {
-                    return current.toString();
-                }
-                list = current;
-            }
-        }
-    }
-    return slug;
-}
-exports.getLocaleText = getLocaleText;
-function trans(text, params) {
-    return bindParams(getLocaleText(text), params);
-}
-exports.trans = trans;
-function registerLang(languageKey, translation = {}) {
-    lang[languageKey] = translation;
-}
-exports.registerLang = registerLang;
-function getLanguages() {
-    return lang;
-}
-exports.getLanguages = getLanguages;
+exports.process = process;

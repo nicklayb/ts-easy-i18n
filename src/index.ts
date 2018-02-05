@@ -1,8 +1,20 @@
-import { trans, getLanguages, setCurrentLocale, getCurrentLocale, registerLang, getLocaleText } from './translate';
-import { format, registerFormatters, getFormatters } from './formatters';
+import { trans,
+    getLanguages,
+    setCurrentLocale,
+    getCurrentLocale,
+    registerLang,
+    getLocaleText
+} from './translate';
+import { format,
+    registerFormatters,
+    getFormatters,
+    extractFormatters
+} from './formatters';
+import { Dictionary } from './types';
 
-function process(text:string, params = {}, ...formatterKeys: string []) {
-    return format(trans(text, params), formatterKeys);
+function process(text:string, params:Dictionary<any> = {}, formatterKeys: string [] = []) {
+    let translatedText = trans(text, params);
+    return format(translatedText, formatterKeys);
 }
 
 export {
@@ -11,6 +23,7 @@ export {
     setCurrentLocale,
     registerLang,
     getLocaleText,
+    extractFormatters,
 
     trans,
 

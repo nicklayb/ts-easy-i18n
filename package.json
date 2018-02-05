@@ -1,0 +1,23 @@
+{
+  "name": "ts-easy-i18n",
+  "version": "0.0.1",
+  "description": "TypeScript implementation of easy-i18n package. Based on react-easy-i18n",
+  "main": "index.js",
+  "types" : "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicklayb/ts-easy-i18n.git"
+  },
+  "author": "Nicolas Boisvert (nicklay@me.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicklayb/ts-easy-i18n/issues"
+  },
+  "homepage": "https://github.com/nicklayb/ts-easy-i18n#readme",
+  "devDependencies": {
+    "typescript": "^2.7.1"
+  }
+}

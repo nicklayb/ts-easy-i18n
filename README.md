@@ -6,6 +6,7 @@
 npm install --save ts-easy-i18n
 ```
 
+
 ### Usage
 
 #### Creating new language bundle

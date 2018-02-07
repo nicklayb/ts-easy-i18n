@@ -17,6 +17,10 @@ import {
 } from './translateChoice';
 import { Dictionary } from './types';
 
+function processChoice(text:string, count:number, params?:Dictionary<any>, formatterKeys?: string []) {
+    return format(transChoice(text, count, params || {}), formatterKeys || []);
+}
+
 function process(text:string, params?:Dictionary<any>, formatterKeys?: string []) {
     return format(trans(text, params || {}), formatterKeys || []);
 }
@@ -39,5 +43,6 @@ export {
     getFormatters,
     registerFormatters,
 
-    process
+    process,
+    processChoice
 };

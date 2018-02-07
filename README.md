@@ -229,7 +229,7 @@ import { format } from 'ts-easy-i18n';
 format('hi' , ['uppercase']);
 ```
 
-#### `process`
+#### `process` or `processChoice`
 The process function does everything from the functions `trans` and `format`. This what to you if you want to format a translated text
 
 ```ts
@@ -240,5 +240,7 @@ process('hi');
 process('hi', { fullname: 'Robert'});
 //  or
 process('hi', { fullname: 'Robert'}, ['uppercase']);
+
+processChoice('hi', 6, { fullname: 'Robert'}, ['uppercase']);
 ```
 

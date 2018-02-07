@@ -16,6 +16,10 @@ const translateChoice_1 = require("./translateChoice");
 exports.transChoice = translateChoice_1.transChoice;
 exports.createExactRule = translateChoice_1.createExactRule;
 exports.createRangeRule = translateChoice_1.createRangeRule;
+function processChoice(text, count, params, formatterKeys) {
+    return formatters_1.format(translateChoice_1.transChoice(text, count, params || {}), formatterKeys || []);
+}
+exports.processChoice = processChoice;
 function process(text, params, formatterKeys) {
     return formatters_1.format(translate_1.trans(text, params || {}), formatterKeys || []);
 }

@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chai_1 = require("chai");
 const i18n = __importStar(require("../src/index"));
 require("mocha");
+const index_1 = require("../src/index");
 const beforeTrans = () => {
     i18n.registerLang('en', {
         hi: 'Hi :name',
@@ -161,17 +162,61 @@ describe('getLocaleText', () => {
         chai_1.expect(i18n.getLocaleText(key)).equal(key);
     });
 });
-// describe('sayHello', () => {
-//     beforeEach(() => {
-//         dom.create();
-//         sayHello();
-//     });
-//
-//     afterEach(() => {
-//         dom.destroy();
-//     });
-//
-//     it('it adds <p> element to <body> in the document', () => {
-//         expect(document.querySelectorAll('p').length).equal(1);
-//     });
-// });
+describe('transChoice', () => {
+    const trans = {
+        account: {
+            posts: [
+                index_1.createExactRule('No post', 0),
+                index_1.createExactRule('Some posts'),
+            ],
+            comments: [
+                index_1.createExactRule('No comment', 0),
+                index_1.createRangeRule('Many comments', 1, 5),
+                index_1.createRangeRule('A lot of comments', 6),
+            ],
+            followers: [
+                index_1.createExactRule('No follower', 0),
+                index_1.createExactRule(':count followers')
+            ],
+            status: [
+                index_1.createExactRule(':fullname does not have friends', 0),
+                index_1.createExactRule(':fullname has :count friends'),
+            ]
+        }
+    };
+    beforeEach(() => {
+        i18n.registerLang('en', trans);
+        i18n.setCurrentLocale('en');
+    });
+    it('should translate without plural', () => {
+        const key = 'account.posts';
+        chai_1.expect(i18n.transChoice(key, 0)).equal(trans.account.posts[0].text);
+    });
+    it('should translate with plural', () => {
+        const key = 'account.posts';
+        chai_1.expect(i18n.transChoice(key, 2)).equal(trans.account.posts[1].text);
+    });
+    it('should translate with quantity', () => {
+        const key = 'account.comments';
+        chai_1.expect(i18n.transChoice(key, 0)).equal(trans.account.comments[0].text);
+    });
+    it('should translate with quantity in range', () => {
+        const key = 'account.comments';
+        chai_1.expect(i18n.transChoice(key, 3)).equal(trans.account.comments[1].text);
+    });
+    it('should translate with quantity at maximum', () => {
+        const key = 'account.comments';
+        chai_1.expect(i18n.transChoice(key, 100)).equal(trans.account.comments[2].text);
+    });
+    it('should translate with implicit param', () => {
+        const key = 'account.followers';
+        const count = 100;
+        chai_1.expect(i18n.transChoice(key, count)).equal(trans.account.followers[1].text.replace(':count', count.toString()));
+    });
+    it('should translate with explicit param', () => {
+        const key = 'account.status';
+        const count = 100;
+        const fullname = 'Super Mario';
+        chai_1.expect(i18n.transChoice(key, count, { fullname })).equal(trans.account.status[1].text.replace(':count', count.toString()).replace(':fullname', fullname));
+    });
+});

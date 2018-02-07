@@ -134,9 +134,79 @@ format('home', ['surround:(,)']);    //  Will output "(Home)"
 format('home', ['surround:[,]']);    //  Will output "[Home]"
 ```
 
-#### Three way to do things
+### Four way to do things
+#### `transChoice` **New**
+##### Declaring cases
 
-##### `trans`
+There are two type of pluralisation rule you can use. An `ExactRule` which is exactly a numer or anything. Also a `RangeRule` which checks if a value is between two other value or the Infinity. All you need to do is set an array instead of a string.
+
+**Exact rule**
+
+Use the creator `createExactRule` from the package to proceed.
+
+Parameters are :
+- `text`: The text
+- `count` (*optional*): The value to compare (*if you do not provide any value, it's considered as a an "else" case where anything will work*)
+
+```ts
+
+import { createExactRule } from 'ts-easy-i18n';
+
+registerLang('en', {
+    friends: [
+        createExactRule('No friends... sorry...', 0),   //  If 0 is provided
+        createExactRule('Oh! :count friends, nice'),    //  else (the :count will print the actual given count)
+    ]
+});
+```
+
+**Range rule**
+
+Use the creator `createRangeRule` from the package to proceed.
+
+Parameters are :
+- `text`: The text
+- `min`: The minimum value to compare
+- `max` (*optional*): The maximum value to compare (*if you do not provide any value, Infinity will be set*)
+
+```ts
+
+import { createRangeRule } from 'ts-easy-i18n';
+
+registerLang('en', {
+    friends: [
+        createRangeRule('You have a friend, that\'s a strat', 1, 1),    //  You could replace this with an Exact rule
+        createRangeRule('Oh! :count friends, it\'s a beggining', 2, 5), //  Between 2 and 5
+        createRangeRule('Oh! :count friends, it\'s a beggining', 6),    //  From 6 and so on
+    ]
+});
+```
+
+Here is how you call it.
+
+```ts
+import { transChoice } from 'ts-easy-i18n';
+
+registerLang('fr', {
+    friends: [
+        createExactRule('No friends... sorry...', 0),   //  If 0 is provided
+        createExactRule('Oh! :count friends, nice'),    //  else (the :count will print the actual given count)
+    ],
+    hasFriend: [
+        createExactRule(':fullname has no friend', 0),                  // 0 case
+        createRangeRule(':fullname starts with :count friends', 1, 10), // Between 1 and 10
+        createRangeRule(':fullname has :count friends', 11),            // From 11 and so on
+    ]
+});
+
+transChoice('friends', 0);  // "No friends... sorry..."
+transChoice('friends', 5);  // "Oh! 5 friends, nice"
+transChoice('hasFriends', 0, { fullname: 'Super Mario' });  // "Super Mario has no friend"
+transChoice('hasFriends', 5, { fullname: 'Super Mario' });  // "Super Mario starts with 5 friends"
+transChoice('hasFriends', 100, { fullname: 'Super Mario' });  // "Super Mario has 100 friends"
+```
+
+#### `trans`
 The trans function only translate the text with parameters. You cannot provide formatters to it.
 
 ```ts
@@ -148,7 +218,7 @@ trans('hi' , {
     fullname: 'Paul'
 });
 ```
-##### `format`
+#### `format`
 
 The format function only formats the text with given formatters. You cannot translate de text with it.
 
@@ -158,7 +228,7 @@ import { format } from 'ts-easy-i18n';
 format('hi' , ['uppercase']);
 ```
 
-##### `process`
+#### `process`
 The process function does everything from the functions `trans` and `format`. This what to you if you want to format a translated text
 
 ```ts

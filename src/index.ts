@@ -10,6 +10,11 @@ import { format,
     getFormatters,
     extractFormatters
 } from './formatters';
+import {
+    transChoice,
+    createExactRule,
+    createRangeRule
+} from './translateChoice';
 import { Dictionary } from './types';
 
 function process(text:string, params?:Dictionary<any>, formatterKeys?: string []) {
@@ -25,6 +30,10 @@ export {
     extractFormatters,
 
     trans,
+
+    transChoice,
+    createExactRule,
+    createRangeRule,
 
     format,
     getFormatters,

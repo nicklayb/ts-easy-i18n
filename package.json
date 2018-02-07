@@ -1,6 +1,6 @@
 {
   "name": "ts-easy-i18n",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "TypeScript implementation of easy-i18n package. Based on react-easy-i18n",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

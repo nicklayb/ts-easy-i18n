@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const DEFAULT_LOCALE = 'en';
 const KEY_SPLITTER = '.';
 let _currentLocale = DEFAULT_LOCALE;
+const returnables = [Array, String];
 let lang = {};
 function localeIsAvailable(locale) {
     return !!lang[locale];
@@ -17,29 +18,35 @@ function getCurrentLocale() {
 exports.getCurrentLocale = getCurrentLocale;
 function bindParams(text, params) {
     for (let key in params) {
-        let qualifiedKey = ':' + key;
+        let qualifiedKey = `:${key}`;
         text = text.replace(qualifiedKey, params[key]);
     }
     return text;
 }
+exports.bindParams = bindParams;
 function getLocaleBundle() {
     return lang[getCurrentLocale()];
 }
-function getLocaleText(slug) {
+function getLocaleObject(slug) {
     if (slug && slug.constructor === String) {
-        const splitted = slug.toString().split(KEY_SPLITTER);
         let list = getLocaleBundle();
+        const splitted = slug.split('.');
         for (let i = 0; i < splitted.length; i++) {
-            const current = list[splitted[i]];
-            if (current) {
-                if (current.constructor === String) {
-                    return current.toString();
+            const next = list[splitted[i]];
+            if (next) {
+                if (returnables.includes(next.constructor)) {
+                    return next;
                 }
-                list = current;
+                list = next;
             }
         }
     }
     return slug;
+}
+exports.getLocaleObject = getLocaleObject;
+function getLocaleText(slug) {
+    const object = getLocaleObject(slug);
+    return (object.constructor === String) ? object : slug;
 }
 exports.getLocaleText = getLocaleText;
 function trans(text, params) {

@@ -2,7 +2,10 @@ import { LanguageBundle, Dictionary } from './types';
 
 const DEFAULT_LOCALE: string = 'en';
 const KEY_SPLITTER: string = '.';
+
 let _currentLocale = DEFAULT_LOCALE;
+
+const returnables = [Array, String];
 
 let lang: Dictionary<LanguageBundle> = {};
 
@@ -20,7 +23,7 @@ function getCurrentLocale(): string {
 
 function bindParams(text: string, params: Dictionary<any>): string {
     for (let key in params) {
-        let qualifiedKey = ':' + key;
+        let qualifiedKey = `:${key}`;
         text = text.replace(qualifiedKey, params[key]);
     }
     return text;
@@ -30,21 +33,26 @@ function getLocaleBundle(): LanguageBundle {
     return lang[getCurrentLocale()];
 }
 
-function getLocaleText(slug: string): string {
+function getLocaleObject(slug: string): any {
     if (slug && slug.constructor === String) {
-        const splitted = slug.toString().split(KEY_SPLITTER);
         let list = getLocaleBundle();
+        const splitted = slug.split('.');
         for (let i = 0; i < splitted.length; i++) {
-            const current = list[splitted[i]];
-            if (current) {
-                if (current.constructor === String) {
-                    return current.toString();
+            const next = list[splitted[i]];
+            if (next) {
+                if (returnables.includes(next.constructor)) {
+                    return next;
                 }
-                list = current;
+                list = next;
             }
         }
     }
     return slug;
+}
+
+function getLocaleText(slug: string): string {
+    const object = getLocaleObject(slug);
+    return (object.constructor === String) ? object : slug;
 }
 
 function trans(text: string, params?: Dictionary<Object>): string {
@@ -61,9 +69,11 @@ function getLanguages(): Dictionary<LanguageBundle> {
 
 export {
     trans,
+    bindParams,
     getLanguages,
     setCurrentLocale,
     getCurrentLocale,
     getLocaleText,
+    getLocaleObject,
     registerLang
 };

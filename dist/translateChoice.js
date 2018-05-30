@@ -1,36 +1,71 @@
 "use strict";
+
+var _assign = require("babel-runtime/core-js/object/assign");
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _classCallCheck2 = require("babel-runtime/helpers/classCallCheck");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require("babel-runtime/helpers/createClass");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 Object.defineProperty(exports, "__esModule", { value: true });
-const translate_1 = require("./translate");
-class ExactRule {
-    constructor(text, count) {
-        this.count = (count !== undefined) ? count : null;
+var translate_1 = require("./translate");
+
+var ExactRule = function () {
+    function ExactRule(text, count) {
+        (0, _classCallCheck3.default)(this, ExactRule);
+
+        this.count = count !== undefined ? count : null;
         this.text = text;
     }
-    evaluate(count) {
-        return (this.count === null || this.count === count);
-    }
-}
-class RangeRule {
-    constructor(text, min, max) {
+
+    (0, _createClass3.default)(ExactRule, [{
+        key: "evaluate",
+        value: function evaluate(count) {
+            return this.count === null || this.count === count;
+        }
+    }]);
+    return ExactRule;
+}();
+
+var RangeRule = function () {
+    function RangeRule(text, min, max) {
+        (0, _classCallCheck3.default)(this, RangeRule);
+
         this.max = max !== undefined ? max : Infinity;
         this.min = min;
         this.text = text;
     }
-    evaluate(count) {
-        return count >= this.min && (!this.max || count <= this.max);
-    }
-}
+
+    (0, _createClass3.default)(RangeRule, [{
+        key: "evaluate",
+        value: function evaluate(count) {
+            return count >= this.min && (!this.max || count <= this.max);
+        }
+    }]);
+    return RangeRule;
+}();
+
 function createExactRule(text, count) {
     return new ExactRule(text, count);
 }
 exports.createExactRule = createExactRule;
-function createRangeRule(text, min = 0, max) {
+function createRangeRule(text) {
+    var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    var max = arguments[2];
+
     return new RangeRule(text, min, max);
 }
 exports.createRangeRule = createRangeRule;
 function pluralize(rules, count) {
-    for (let key in rules) {
-        const rule = rules[key];
+    for (var key in rules) {
+        var rule = rules[key];
         if (rule.evaluate(count)) {
             return rule.text;
         }
@@ -38,15 +73,14 @@ function pluralize(rules, count) {
     return rules[0].text;
 }
 function transChoice(slug, count, params) {
-    const translated = translate_1.getLocaleObject(slug);
-    let text = slug;
+    var translated = translate_1.getLocaleObject(slug);
+    var text = slug;
     if (translated.constructor === Array) {
         text = pluralize(translated, count);
-    }
-    else if (translated.constructor === String) {
+    } else if (translated.constructor === String) {
         text = translated;
     }
-    params = Object.assign(params || {}, { count });
+    params = (0, _assign2.default)(params || {}, { count: count });
     return translate_1.bindParams(text, params);
 }
 exports.transChoice = transChoice;

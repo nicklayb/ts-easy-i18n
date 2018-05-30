@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "node ./node_modules/gulp/bin/gulp.js ts-babel",
     "test": "mocha -r ts-node/register src/**/*.spec.ts"
   },
   "repository": {

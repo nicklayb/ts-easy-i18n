@@ -1,18 +1,20 @@
 "use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
+
+var __importStar = undefined && undefined.__importStar || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) {
+        if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    }result["default"] = mod;
     return result;
-}
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-env mocha */
-const chai_1 = require("chai");
-const i18n = __importStar(require("../src/index"));
+var chai_1 = require("chai");
+var i18n = __importStar(require("../src/index"));
 require("mocha");
-const index_1 = require("../src/index");
-const beforeTrans = () => {
+var index_1 = require("../src/index");
+var beforeTrans = function beforeTrans() {
     i18n.registerLang('en', {
         hi: 'Hi :name',
         how_are_you: 'How are you?'
@@ -23,46 +25,50 @@ const beforeTrans = () => {
     });
     i18n.setCurrentLocale('en');
 };
-const uc = (text, params) => text.toUpperCase();
-const surround = (text, params) => params ? params[0] + text + params[1] : text;
-describe('trans', () => {
+var uc = function uc(text, params) {
+    return text.toUpperCase();
+};
+var surround = function surround(text, params) {
+    return params ? params[0] + text + params[1] : text;
+};
+describe('trans', function () {
     beforeEach(beforeTrans);
-    it('should translate hi with a name', () => {
-        const key = 'hi';
-        const name = 'Bob';
-        const expectation = `Hi ${name}`;
-        const result = i18n.trans(key, {
-            name
+    it('should translate hi with a name', function () {
+        var key = 'hi';
+        var name = 'Bob';
+        var expectation = "Hi " + name;
+        var result = i18n.trans(key, {
+            name: name
         });
         chai_1.expect(result).equal(expectation);
     });
-    it('should translate an unparametered text', () => {
-        const key = 'how_are_you';
-        const locale = 'en';
-        const expectation = i18n.getLanguages()[locale][key];
-        const result = i18n.trans(key);
+    it('should translate an unparametered text', function () {
+        var key = 'how_are_you';
+        var locale = 'en';
+        var expectation = i18n.getLanguages()[locale][key];
+        var result = i18n.trans(key);
         chai_1.expect(result).equal(expectation);
     });
-    it('should return the same key', () => {
-        const key = 'is_this_the_real_life';
-        const expectation = key;
-        const result = i18n.trans(key);
+    it('should return the same key', function () {
+        var key = 'is_this_the_real_life';
+        var expectation = key;
+        var result = i18n.trans(key);
         chai_1.expect(result).equal(expectation);
     });
-    it('should translate how are you to french', () => {
-        const key = 'how_are_you';
-        const locale = 'fr';
-        const expectation = i18n.getLanguages()[locale][key];
+    it('should translate how are you to french', function () {
+        var key = 'how_are_you';
+        var locale = 'fr';
+        var expectation = i18n.getLanguages()[locale][key];
         i18n.setCurrentLocale(locale);
-        const result = i18n.trans(key);
+        var result = i18n.trans(key);
         chai_1.expect(result).equal(expectation);
     });
 });
-describe('registerLang', () => {
+describe('registerLang', function () {
     beforeEach(beforeTrans);
-    it('should register deutsch as a new language', () => {
-        const key = 'de';
-        const trans = {
+    it('should register deutsch as a new language', function () {
+        var key = 'de';
+        var trans = {
             hi: 'Guten Tag :name',
             how_are_you: 'Wie geht es dir?'
         };
@@ -70,12 +76,12 @@ describe('registerLang', () => {
         chai_1.expect(i18n.getLanguages()[key]).equal(trans);
     });
 });
-describe('setCurrentLocale', () => {
+describe('setCurrentLocale', function () {
     beforeEach(beforeTrans);
-    it('should translate with a newly added deutsch language', () => {
-        const key = 'de';
-        const text_key = 'hi';
-        const trans = {
+    it('should translate with a newly added deutsch language', function () {
+        var key = 'de';
+        var text_key = 'hi';
+        var trans = {
             hi: 'Guten Tag :name',
             how_are_you: 'Wie geht es dir?'
         };
@@ -84,139 +90,126 @@ describe('setCurrentLocale', () => {
         chai_1.expect(i18n.trans(text_key)).equal(trans[text_key]);
     });
 });
-describe('getCurrentLocale', () => {
+describe('getCurrentLocale', function () {
     beforeEach(beforeTrans);
-    it('should change the locale to french', () => {
-        const locale = 'fr';
+    it('should change the locale to french', function () {
+        var locale = 'fr';
         i18n.setCurrentLocale(locale);
-        const result = i18n.getCurrentLocale();
+        var result = i18n.getCurrentLocale();
         chai_1.expect(result).equal(locale);
     });
 });
-describe('registerFormatters', () => {
-    it('should register an uppercase formatter', () => {
+describe('registerFormatters', function () {
+    it('should register an uppercase formatter', function () {
         i18n.registerFormatters({
-            uc
+            uc: uc
         });
         chai_1.expect(i18n.getFormatters()['uc']).equal(uc);
     });
 });
-describe('format', () => {
-    it('should format a name to uppercase', () => {
-        const baseText = 'John';
-        const expectation = baseText.toUpperCase();
+describe('format', function () {
+    it('should format a name to uppercase', function () {
+        var baseText = 'John';
+        var expectation = baseText.toUpperCase();
         i18n.registerFormatters({
-            uc
+            uc: uc
         });
         chai_1.expect(i18n.format(baseText, 'uc'.split('|'))).equal(expectation);
     });
-    it('should format a name to uppercase and split surround with parentheses', () => {
-        const baseText = 'John';
-        const expectation = '(' + baseText.toUpperCase() + ')';
+    it('should format a name to uppercase and split surround with parentheses', function () {
+        var baseText = 'John';
+        var expectation = '(' + baseText.toUpperCase() + ')';
         i18n.registerFormatters({
-            uc, surround
+            uc: uc, surround: surround
         });
         chai_1.expect(i18n.format(baseText, 'uc|surround:(,)'.split('|'))).equal(expectation);
     });
 });
-describe('process', () => {
+describe('process', function () {
     beforeEach(beforeTrans);
-    it('should translate and format a text', () => {
-        const key = 'hi';
-        const params = { name: 'John' };
-        const formatters = 'uc|surround:(,)'.split('|');
+    it('should translate and format a text', function () {
+        var key = 'hi';
+        var params = { name: 'John' };
+        var formatters = 'uc|surround:(,)'.split('|');
         i18n.registerFormatters({
-            uc,
-            surround,
+            uc: uc,
+            surround: surround
         });
-        const expectation = '(Hi John)'.toUpperCase();
+        var expectation = '(Hi John)'.toUpperCase();
         chai_1.expect(i18n.process(key, params, formatters)).equal(expectation);
     });
 });
-describe('getLocaleText', () => {
-    const trans = {
+describe('getLocaleText', function () {
+    var trans = {
         account: {
             user: {
                 firstname: 'Firstname',
-                lastname: 'Lastname',
+                lastname: 'Lastname'
             },
             profile: 'Profile'
         }
     };
-    beforeEach(() => {
+    beforeEach(function () {
         i18n.registerLang('en', trans);
         i18n.setCurrentLocale('en');
     });
-    it('should gives correct Profile', () => {
+    it('should gives correct Profile', function () {
         chai_1.expect(i18n.getLocaleText('account.profile')).equal(trans.account.profile);
     });
-    it('should gives correct Firstname', () => {
+    it('should gives correct Firstname', function () {
         chai_1.expect(i18n.getLocaleText('account.user.firstname')).equal(trans.account.user.firstname);
     });
-    it('should gives incorrect email', () => {
-        const key = 'account.user.email';
+    it('should gives incorrect email', function () {
+        var key = 'account.user.email';
         chai_1.expect(i18n.getLocaleText(key)).equal(key);
     });
-    it('should gives incorrect user', () => {
-        const key = 'account.user';
+    it('should gives incorrect user', function () {
+        var key = 'account.user';
         chai_1.expect(i18n.getLocaleText(key)).equal(key);
     });
 });
-describe('transChoice', () => {
-    const trans = {
+describe('transChoice', function () {
+    var trans = {
         account: {
-            posts: [
-                index_1.createExactRule('No post', 0),
-                index_1.createExactRule('Some posts'),
-            ],
-            comments: [
-                index_1.createExactRule('No comment', 0),
-                index_1.createRangeRule('Many comments', 1, 5),
-                index_1.createRangeRule('A lot of comments', 6),
-            ],
-            followers: [
-                index_1.createExactRule('No follower', 0),
-                index_1.createExactRule(':count followers')
-            ],
-            status: [
-                index_1.createExactRule(':fullname does not have friends', 0),
-                index_1.createExactRule(':fullname has :count friends'),
-            ]
+            posts: [index_1.createExactRule('No post', 0), index_1.createExactRule('Some posts')],
+            comments: [index_1.createExactRule('No comment', 0), index_1.createRangeRule('Many comments', 1, 5), index_1.createRangeRule('A lot of comments', 6)],
+            followers: [index_1.createExactRule('No follower', 0), index_1.createExactRule(':count followers')],
+            status: [index_1.createExactRule(':fullname does not have friends', 0), index_1.createExactRule(':fullname has :count friends')]
         }
     };
-    beforeEach(() => {
+    beforeEach(function () {
         i18n.registerLang('en', trans);
         i18n.setCurrentLocale('en');
     });
-    it('should translate without plural', () => {
-        const key = 'account.posts';
+    it('should translate without plural', function () {
+        var key = 'account.posts';
         chai_1.expect(i18n.transChoice(key, 0)).equal(trans.account.posts[0].text);
     });
-    it('should translate with plural', () => {
-        const key = 'account.posts';
+    it('should translate with plural', function () {
+        var key = 'account.posts';
         chai_1.expect(i18n.transChoice(key, 2)).equal(trans.account.posts[1].text);
     });
-    it('should translate with quantity', () => {
-        const key = 'account.comments';
+    it('should translate with quantity', function () {
+        var key = 'account.comments';
         chai_1.expect(i18n.transChoice(key, 0)).equal(trans.account.comments[0].text);
     });
-    it('should translate with quantity in range', () => {
-        const key = 'account.comments';
+    it('should translate with quantity in range', function () {
+        var key = 'account.comments';
         chai_1.expect(i18n.transChoice(key, 3)).equal(trans.account.comments[1].text);
     });
-    it('should translate with quantity at maximum', () => {
-        const key = 'account.comments';
+    it('should translate with quantity at maximum', function () {
+        var key = 'account.comments';
         chai_1.expect(i18n.transChoice(key, 100)).equal(trans.account.comments[2].text);
     });
-    it('should translate with implicit param', () => {
-        const key = 'account.followers';
-        const count = 100;
+    it('should translate with implicit param', function () {
+        var key = 'account.followers';
+        var count = 100;
         chai_1.expect(i18n.transChoice(key, count)).equal(trans.account.followers[1].text.replace(':count', count.toString()));
     });
-    it('should translate with explicit param', () => {
-        const key = 'account.status';
-        const count = 100;
-        const fullname = 'Super Mario';
-        chai_1.expect(i18n.transChoice(key, count, { fullname })).equal(trans.account.status[1].text.replace(':count', count.toString()).replace(':fullname', fullname));
+    it('should translate with explicit param', function () {
+        var key = 'account.status';
+        var count = 100;
+        var fullname = 'Super Mario';
+        chai_1.expect(i18n.transChoice(key, count, { fullname: fullname })).equal(trans.account.status[1].text.replace(':count', count.toString()).replace(':fullname', fullname));
     });
 });

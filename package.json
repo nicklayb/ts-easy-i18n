@@ -31,5 +31,8 @@
     "mocha": "^5.2.0",
     "ts-node": "^4.1.0",
     "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "polyfill-array-includes": "^2.0.0"
   }
 }

@@ -1,3 +1,4 @@
+import 'polyfill-array-includes';
 import { trans,
     getLanguages,
     setCurrentLocale,

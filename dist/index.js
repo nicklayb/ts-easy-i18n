@@ -1,6 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+require("polyfill-array-includes");
 var translate_1 = require("./translate");
 exports.trans = translate_1.trans;
 exports.getLanguages = translate_1.getLanguages;
